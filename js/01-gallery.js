@@ -36,11 +36,22 @@ function onPreviewClick(evt) {
 }
 
 function modalOpen(originalImageUrl) {
-  lightBoxInstance = basicLightbox.create(`
+  lightBoxInstance = basicLightbox.create(
+    `
     <img src="${originalImageUrl}">
-`);
+`,
+    {
+      onShow: lightBoxInstance => {
+        window.addEventListener('keydown', onEscPress);
+      },
 
-  lightBoxInstance.show(instance => window.addEventListener('keydown', onEscPress));
+      onClose: lightBoxInstance => {
+        window.removeEventListener('keydown', onEscPress);
+      },
+    }
+  );
+
+  lightBoxInstance.show();
 }
 
 function onEscPress(evt) {
@@ -50,5 +61,5 @@ function onEscPress(evt) {
 }
 
 function modalClose() {
-  lightBoxInstance.close(() => window.removeEventListener('keydown', onEscPress));
+  lightBoxInstance.close();
 }
